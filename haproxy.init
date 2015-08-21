@@ -31,17 +31,18 @@ LOCKFILE=/var/lock/subsys/${NAME}
 BINARY=/usr/sbin/${NAME}
 RETVAL=0
 
-# Source networking configuration.
-. /etc/sysconfig/network
-
-# Check that networking is up.
-[ ${NETWORKING} = "no" ] && exit 0
-
-[ -f $CONFIG ] || exit 1
+check()
+{
+	action "Checking configuration sanity for $name: " \
+		$BINARY -c -q -f ${CONFIG}
+	RETVAL=$?
+	return $RETVAL
+}
 
 start()
 {
-	start_daemon --pidfile "$PIDFILE" --lockfile "$LOCKFILE" --expect-user nobody -- $BINARY \
+	check || exit
+	start_daemon --pidfile "$PIDFILE" --lockfile "$LOCKFILE" --expect-user _haproxy -- $BINARY \
 		-D -f ${CONFIG} -p ${PIDFILE}
 	RETVAL=$?
 	return $RETVAL
@@ -49,19 +50,21 @@ start()
 
 stop()
 {
-	stop_daemon --pidfile "$PIDFILE" --lockfile "$LOCKFILE" --expect-user nobody -- $BINARY
+	stop_daemon --pidfile "$PIDFILE" --lockfile "$LOCKFILE" --expect-user _haproxy -- $BINARY
 	RETVAL=$?
 	return $RETVAL
 }
 
 restart()
 {
+	check || exit
 	stop
 	start
 }
 
 reload()
 {
+	check || exit
 	msg_reloading $NAME
 	$BINARY -p "$PIDFILE" -f $CONFIG -sf `cat $PIDFILE`
 	RETVAL=$?
@@ -97,12 +100,15 @@ case "$1" in
 			reload
 		fi
 		;;
+	check)
+		check
+		;;
 	status)
-		status --pidfile "$PIDFILE" --expect-user nobody -- haproxy
+		status --pidfile "$PIDFILE" --expect-user _haproxy -- haproxy
 		RETVAL=$?
 		;;
 	*)
-		msg_usage "${0##*/} {start|stop|reload|restart|condstop|condrestart|condreload|status}"
+		msg_usage "${0##*/} {start|stop|reload|restart|condstop|condrestart|condreload|status|check}"
 		RETVAL=1
 esac
 

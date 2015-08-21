@@ -1,2 +1,5 @@
 tar: v@version@:.
 #diff: v@version@:. patches/alt-fix:.
+copy: *.cfg
+copy: *.init
+copy: *.logrotate
