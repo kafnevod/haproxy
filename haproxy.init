@@ -1,0 +1,109 @@
+#!/bin/sh
+#
+# haproxy	TCP/HTTP reverse proxy for high availability environments
+#
+# chkconfig: - 85 15
+# description: HA-Proxy is a TCP/HTTP reverse proxy which is particularly suited \
+#              for high availability environments.
+# processname: haproxy
+# config: /etc/haproxy/haproxy.conf
+# pidfile: /var/run/haproxy.pid
+### BEGIN INIT INFO
+# Provides:          haproxy
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:
+# Default-Stop:
+# Short-Description: fast and reliable load balancing reverse proxy
+# Description:       This file should be used to start and stop haproxy.
+### END INIT INFO
+
+# Do not load RH compatibility interface.
+WITHOUT_RC_COMPAT=1
+
+# Source function library.
+. /etc/init.d/functions
+
+NAME=haproxy
+PIDFILE=/var/run/${NAME}.pid
+CONFIG=/etc/${NAME}/${NAME}.cfg
+LOCKFILE=/var/lock/subsys/${NAME}
+BINARY=/usr/sbin/${NAME}
+RETVAL=0
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+[ -f $CONFIG ] || exit 1
+
+start()
+{
+	start_daemon --pidfile "$PIDFILE" --lockfile "$LOCKFILE" --expect-user nobody -- $BINARY \
+		-D -f ${CONFIG} -p ${PIDFILE}
+	RETVAL=$?
+	return $RETVAL
+}
+
+stop()
+{
+	stop_daemon --pidfile "$PIDFILE" --lockfile "$LOCKFILE" --expect-user nobody -- $BINARY
+	RETVAL=$?
+	return $RETVAL
+}
+
+restart()
+{
+	stop
+	start
+}
+
+reload()
+{
+	msg_reloading $NAME
+	$BINARY -p "$PIDFILE" -f $CONFIG -sf `cat $PIDFILE`
+	RETVAL=$?
+	return $RETVAL
+} 
+
+# See how we were called.
+case "$1" in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	reload)
+		reload
+		;;
+	restart)
+		restart
+		;;
+	condstop)
+		if [ -e "$LOCKFILE" ]; then
+			stop
+		fi
+		;;
+	condrestart)
+		if [ -e "$LOCKFILE" ]; then
+			restart
+		fi
+		;;
+	condreload)
+		if [ -e "$LOCKFILE" ]; then
+			reload
+		fi
+		;;
+	status)
+		status --pidfile "$PIDFILE" --expect-user nobody -- haproxy
+		RETVAL=$?
+		;;
+	*)
+		msg_usage "${0##*/} {start|stop|reload|restart|condstop|condrestart|condreload|status}"
+		RETVAL=1
+esac
+
+exit $RETVAL
