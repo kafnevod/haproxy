@@ -4,6 +4,8 @@
 %define haproxy_confdir %_sysconfdir/haproxy
 %define haproxy_datadir %_datadir/haproxy
 
+%def_disable lua
+
 Name: haproxy
 Version: 1.6.0
 Release: alt1
@@ -18,7 +20,8 @@ Source1: %name.cfg
 Source2: %name.init
 Source3: %name.logrotate
 
-BuildRequires: libpcre-devel zlib-devel libssl-devel liblua5-devel
+BuildRequires: libpcre-devel zlib-devel libssl-devel
+%{?_enable_lua:BuildRequires: liblua5-devel >= 5.3}
 
 %description
 HA-Proxy is a TCP/HTTP reverse proxy which is particularly suited for high
@@ -46,7 +49,7 @@ regparm_opts=
 regparm_opts="USE_REGPARM=1"
 %endif
 
-%make_build CPU="generic" TARGET="linux2628" USE_OPENSSL=1 USE_PCRE=1 USE_ZLIB=1 USE_NS=1 USE_LUA=1 \
+%make_build CPU="generic" TARGET="linux2628" USE_OPENSSL=1 USE_PCRE=1 USE_ZLIB=1 USE_NS=1 %{?_enable_lua:USE_LUA=1} \
 	"${regparm_opts}" PREFIX="%_prefix" ADDINC="$(pcre-config --cflags)" CFLAGS="%optflags"
 
 pushd contrib/halog
@@ -105,7 +108,6 @@ cp -p examples/errorfiles/* %buildroot%haproxy_datadir/
 %changelog
 * Mon Oct 19 2015 Alexey Shabalin <shaba@altlinux.ru> 1.6.0-alt1
 - 1.6.0
-- build with lua support
 
 * Fri Aug 21 2015 Alexey Shabalin <shaba@altlinux.ru> 1.5.14-alt1
 - 1.5.14
