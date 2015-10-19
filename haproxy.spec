@@ -5,7 +5,7 @@
 %define haproxy_datadir %_datadir/haproxy
 
 Name: haproxy
-Version: 1.5.14
+Version: 1.6.0
 Release: alt1
 
 Summary: HA-Proxy is a TCP/HTTP reverse proxy for high availability environments
@@ -18,7 +18,7 @@ Source1: %name.cfg
 Source2: %name.init
 Source3: %name.logrotate
 
-BuildRequires: libpcre-devel zlib-devel libssl-devel
+BuildRequires: libpcre-devel zlib-devel libssl-devel liblua5-devel
 
 %description
 HA-Proxy is a TCP/HTTP reverse proxy which is particularly suited for high
@@ -46,7 +46,7 @@ regparm_opts=
 regparm_opts="USE_REGPARM=1"
 %endif
 
-%make_build CPU="generic" TARGET="linux2628" USE_OPENSSL=1 USE_PCRE=1 USE_ZLIB=1 \
+%make_build CPU="generic" TARGET="linux2628" USE_OPENSSL=1 USE_PCRE=1 USE_ZLIB=1 USE_NS=1 USE_LUA=1 \
 	"${regparm_opts}" PREFIX="%_prefix" ADDINC="$(pcre-config --cflags)" CFLAGS="%optflags"
 
 pushd contrib/halog
@@ -89,7 +89,7 @@ cp -p examples/errorfiles/* %buildroot%haproxy_datadir/
 %preun_service haproxy
 
 %files
-%doc CHANGELOG LICENSE README ROADMAP doc/architecture.txt doc/configuration.txt doc/proxy-protocol.txt examples/*.cfg
+%doc CHANGELOG LICENSE README ROADMAP doc/architecture.txt doc/configuration.txt doc/intro.txt doc/management.txt doc/proxy-protocol.txt examples/*.cfg
 %dir %haproxy_confdir
 %config(noreplace) %haproxy_confdir/%name.cfg
 %dir %haproxy_datadir
@@ -103,6 +103,10 @@ cp -p examples/errorfiles/* %buildroot%haproxy_datadir/
 %attr(-,%haproxy_user,%haproxy_group) %dir %haproxy_home
 
 %changelog
+* Mon Oct 19 2015 Alexey Shabalin <shaba@altlinux.ru> 1.6.0-alt1
+- 1.6.0
+- build with lua support
+
 * Fri Aug 21 2015 Alexey Shabalin <shaba@altlinux.ru> 1.5.14-alt1
 - 1.5.14
 - run demon as _haproxy user
