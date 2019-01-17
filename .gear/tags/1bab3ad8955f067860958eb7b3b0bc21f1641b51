@@ -1,0 +1,22 @@
+object c592fa5c0d48d088212b0d51fcb43cf73042203f
+type commit
+tag v1.9.2
+tagger Willy Tarreau <w@1wt.eu> 1547659087 +0100
+
+HAProxy 1.9.2
+-----BEGIN PGP SIGNATURE-----
+
+iQIcBAABAgAGBQJcP2dPAAoJEE44bZycYXAv6x4P/0FipbuZPGp9GUebwHcJf085
+X3TJcEq7/XczeUntd3JAhUvjSLOhwojsfpqgYjpQAgvHGDhFMQFgEvOCjfZ6f+1A
+z7h0TfRvtunUo3llkK+XpaxY7wemHpvHiC2qswuew3aL/0cfT/RhCrt+gywUqQdN
+7K/lo1MyzbRtnnymv+14FLvEja9DhB7Qmq+dCyp9F1bAJJnaVlqCoBhWWKevubaH
+07hTPaW/nCU02CptaQ2yNvW6GPrUtWtPevVdr/eY1MrFzfGSxCwWkJhc3ttNDo1R
+4WS7qbLI8FQtiaOAO/BKIgYJV5pRNGDEqzWzwNVENkjE9cpUgvExjjw8t0CHDKev
+0EduUoA1MqNPM5j3QrV9/7DHS+WQ4u/1ORYJzu5lLRn7VTUrXbkH0+JE1f+Y2OHL
+nee5K2m8aQxxDRVU+b4t8uqPjfL01gYryMBomtZxKW8K/0yqrudEoz0W3WBq7VqH
+Ji6xW0AeyCG2kAtWcFa2NEa0/hBmC5VwXBltmg4tnHGMyikH2z04gGXbufICpCRt
+Zf0SpJzw0MLTAUzpArrzPyqv5Jc2odgrnSfsxLLK3LBn91Soera5Akql+/2ITfnc
+aeAZvu6JamvJOTlzgZU6oi5DmJn0qbQC+rDyv72ScyZfEi91kxONFcA1byXUVQpu
+2zW/+d0GAvEUd3J8L4Ee
+=jYLg
+-----END PGP SIGNATURE-----
