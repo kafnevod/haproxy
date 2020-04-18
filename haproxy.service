@@ -1,0 +1,27 @@
+[Unit]
+Description=HAProxy Load Balancer
+Documentation=man:haproxy(1)
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/haproxy
+Environment="CONFIG=/etc/haproxy/haproxy.cfg" "PIDFILE=/run/haproxy.pid" "EXTRAOPTS=-S /run/haproxy-master.sock"
+ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q $EXTRAOPTS
+ExecStart=/usr/sbin/haproxy -Ws -f $CONFIG -p $PIDFILE $EXTRAOPTS
+ExecReload=/usr/sbin/haproxy -f $CONFIG -c -q $EXTRAOPTS
+ExecReload=/bin/kill -USR2 $MAINPID
+KillMode=mixed
+Restart=always
+SuccessExitStatus=143
+Type=notify
+
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+SystemCallFilter=~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync
+
+[Install]
+WantedBy=multi-user.target

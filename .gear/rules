@@ -3,3 +3,4 @@ tar: v@version@:.
 copy: *.cfg
 copy: *.init
 copy: *.logrotate
+copy: *.service
