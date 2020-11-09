@@ -1,0 +1,12 @@
+object aceb6cbd8d7986f855225495f2ca9875981c4a79
+type commit
+tag v2.0.19
+tagger Christopher Faulet <cfaulet@haproxy.com> 1604655050 +0100
+
+HAProxy 2.0.19
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQQH1fGNIBmE19E/t6r1+TYmeqSygAUCX6UXygAKCRD1+TYmeqSy
+gBWmAJ9hacqh4w0IDIOhUo545VvO5FfYdACgotbNM22uUI48qniXkUSnfxK6hZ0=
+=W7As
+-----END PGP SIGNATURE-----
